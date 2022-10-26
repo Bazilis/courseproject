@@ -1,0 +1,21 @@
+﻿@using BLL.Dto
+@model IEnumerable<ItemDto>
+
+@if (Model.Any())
+{
+    <div class="container">
+        <h5>Total items @Model.Count()</h5>
+    </div>
+    <div class="row row-cols-auto">
+        @foreach (var item in Model)
+        {
+            <partial name="_ItemCard" model="item" />
+        }
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">There are no items in this collection!</h1>
+    </div>
+}

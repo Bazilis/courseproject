@@ -1,0 +1,124 @@
+﻿@using DAL.Entities
+@using Microsoft.AspNetCore.Identity
+@model BLL.Dto.ItemDto
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+@inject BLL.Interfaces.IUserLikeService UserLike
+
+<div class="card">
+@if(Model != null)
+{
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">@Model.Description</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Created by @await UserManager.FindByIdAsync(Model.UserId.ToString())</li>
+        <li class="list-group-item">Creation time @Model.ItemCreationTime</li>
+    </ul>
+    if (SignInManager.IsSignedIn(User))
+    {
+        var user = await UserManager.FindByNameAsync(User.Identity?.Name);
+        if (UserLike.IsUserHasLike(user.Id, Model.Id))
+        {
+            <div class="card-body">
+                <i class="bi bi-hand-thumbs-up" data-bs-toggle="tooltip" title="You already have like"></i>
+                @if (Model.UsersLikes?.Count == 1)
+                {
+                    <span class="badge rounded-pill bg-success">
+                        @Model.UsersLikes?.Count like
+                    </span>
+                }
+                else
+                {
+                    <span class="badge rounded-pill bg-success">
+                        @Model.UsersLikes?.Count likes
+                    </span>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="card-body">
+                <a asp-controller="UserLike" asp-action="AddUserLike" asp-route-userid="@user.Id" asp-route-itemid="@Model.Id" class="btn btn-outline-success" data-bs-toggle="tooltip" title="Push me!">
+                    <i class="bi bi-hand-thumbs-up">Like</i>
+                </a>
+                @if (Model.UsersLikes?.Count == 1)
+                {
+                    <span class="badge rounded-pill bg-success">
+                        @Model.UsersLikes?.Count like
+                    </span>
+                }
+                else
+                {
+                    <span class="badge rounded-pill bg-success">
+                        @Model.UsersLikes?.Count likes
+                    </span>
+                }
+            </div>
+        }
+
+        if(Model.Comments.Any())
+        {
+            <div class="card-body">
+                <p class="card-text">Comments</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                @foreach (var comment in Model.Comments)
+                {
+                    <li class="list-group-item">
+                        <p>@comment.CommentCreationTime by @await UserManager.FindByIdAsync(comment.UserId.ToString())</p>
+                        <p>@comment.Сontent</p>
+                    </li>
+                }
+            </ul>
+        }
+
+        <div class="card-body">
+            <form id="myform" method="post">
+                <input value="@user.Id" name="userId" hidden />
+                <input value="@Model.Id" name="itemId" hidden />
+                <div class="form-floating">
+                    <textarea name="content" class="form-control" id="floatingTextarea"></textarea>
+                    <label>Your comment</label>
+                </div>
+                <button asp-controller="Comment" asp-action="AddComment" type="submit" class="btn btn-success">Add your comment</button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <div class="card-body">
+            <i class="bi bi-hand-thumbs-up" data-bs-toggle="tooltip" title="Like"></i>
+                @if(Model.UsersLikes?.Count == 1)
+                {
+                    <span class="badge rounded-pill bg-success">
+                        @Model.UsersLikes?.Count like
+                    </span>
+                }
+                else
+                {
+                    <span class="badge rounded-pill bg-success">
+                        @Model.UsersLikes?.Count likes
+                    </span>
+                }
+        </div>
+        if (Model.Comments.Any())
+        {
+            <div class="card-body">
+                <h5 class="card-title">Comments</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                @foreach (var comment in Model.Comments)
+                {
+                    <li class="list-group-item">
+                        <p>@comment.CommentCreationTime by @await UserManager.FindByIdAsync(comment.UserId.ToString())</p>
+                        <p>@comment.Сontent</p>
+                    </li>
+                }
+            </ul>
+        }
+    }
+}
+</div>

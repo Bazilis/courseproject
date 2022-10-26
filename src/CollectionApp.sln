@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationLayer", "PresentationLayer\PresentationLayer.csproj", "{161C3588-C65A-4BF6-A42E-83CD7A5A2A75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{1ADE7F78-C975-4514-A2F4-CF00624C94F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{BF4F4011-37C9-4199-9F03-068585F3524C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{161C3588-C65A-4BF6-A42E-83CD7A5A2A75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{161C3588-C65A-4BF6-A42E-83CD7A5A2A75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{161C3588-C65A-4BF6-A42E-83CD7A5A2A75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{161C3588-C65A-4BF6-A42E-83CD7A5A2A75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1ADE7F78-C975-4514-A2F4-CF00624C94F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ADE7F78-C975-4514-A2F4-CF00624C94F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ADE7F78-C975-4514-A2F4-CF00624C94F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ADE7F78-C975-4514-A2F4-CF00624C94F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF4F4011-37C9-4199-9F03-068585F3524C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF4F4011-37C9-4199-9F03-068585F3524C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF4F4011-37C9-4199-9F03-068585F3524C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF4F4011-37C9-4199-9F03-068585F3524C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {86540C36-9544-4FAD-8AD6-667A23DF533B}
+	EndGlobalSection
+EndGlobal

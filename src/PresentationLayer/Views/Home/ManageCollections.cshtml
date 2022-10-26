@@ -1,0 +1,45 @@
+﻿@using BLL.Dto
+@using DAL.Entities
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<CollectionDto>
+@inject SignInManager<AppUser> SignInManager
+
+@if (Model.Any())
+{
+    <div class="row row-cols-auto">
+        @foreach (var collection in Model)
+        {
+            <partial name="_CollectionCard" model="collection" />
+        }
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div class="align-self-center">
+                <div class="card">
+                    <div class="card-body">
+                        <a asp-controller="Collection" asp-action="Add" class="btn btn-outline-success" data-bs-toggle="tooltip" title="Push me!">
+                            Add new collection
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">There are no collections!</h1>
+    </div>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div class="align-self-center">
+            <div class="card">
+                <div class="card-body">
+                    <a asp-controller="Collection" asp-action="Add" class="btn btn-outline-success" data-bs-toggle="tooltip" title="Push me!">
+                        Add new collection
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+}

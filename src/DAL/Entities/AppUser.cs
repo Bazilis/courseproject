@@ -1,0 +1,10 @@
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace DAL.Entities
+{
+    public class AppUser : IdentityUser<int>
+    {
+        public bool IsBlocked { get; set; }
+        public ICollection<Collection>? Collections { get; set; }
+    }
+}

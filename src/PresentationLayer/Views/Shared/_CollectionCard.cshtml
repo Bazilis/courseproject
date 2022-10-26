@@ -1,0 +1,49 @@
+﻿@using DAL.Entities
+@using Microsoft.AspNetCore.Identity
+@model BLL.Dto.CollectionDto
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+<div class="col">
+    <div class="card">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Name</h5>
+            <h5 class="card-title">Collection of @Model.CollectionType</h5>
+            <br />
+            <p>@Model.Description</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Created by @await UserManager.FindByIdAsync(Model.AppUserId.ToString())</li>
+            <li class="list-group-item">Creation time @Model.CollectionCreationTime</li>
+        </ul>
+        
+        @if (SignInManager.IsSignedIn(User))
+        {
+            var user = await UserManager.FindByNameAsync(User.Identity?.Name);
+            if ((string?)ViewContext.RouteData.Values["Action"] == "ManageCollections"
+                || await UserManager.IsInRoleAsync(user, "Admin"))
+            {
+                <div class="card-body align-self-center">
+                    <a asp-controller="Collection" asp-action="ManageItems" asp-route-collectionid="@Model.Id" class="btn btn-primary">Manage items</a>
+                </div>
+                <div class="card-body">
+                    <a asp-controller="Collection" asp-action="Edit" asp-route-collectionid="@Model.Id" class="btn btn-outline-secondary">Edit collection</a>
+                    <a asp-controller="Collection" asp-action="Delete" asp-route-collectionid="@Model.Id" asp-route-userid="@Model.AppUserId" class="btn btn-outline-danger">Delete collection</a>
+                </div>
+            }
+            else
+            {
+                <div class="card-body align-self-center">
+                    <a asp-controller="Collection" asp-action="Details" asp-route-collectionid="@Model.Id" class="btn btn-primary">Open collection</a>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="card-body align-self-center">
+                <a asp-controller="Collection" asp-action="Details" asp-route-collectionid="@Model.Id" class="btn btn-primary">Open collection</a>
+            </div>
+        }
+    </div>
+</div>
