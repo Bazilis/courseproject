@@ -12,7 +12,9 @@ namespace DAL
         }
 
         public DbSet<Collection>? Collections { get; set; }
+        public DbSet<CollectionImage>? CollectionImages { get; set; }
         public DbSet<Item>? Items { get; set; }
+        public DbSet<ItemImage>? ItemImages { get; set; }
         public DbSet<Tag>? Tags { get; set; }
         public DbSet<Comment>? Comments { get; set; }
         public DbSet<UserLike>? UserLikes { get; set; }
@@ -24,6 +26,16 @@ namespace DAL
             modelBuilder.Entity<Collection>()
                 .Property(c => c.CollectionType)
                 .HasConversion<string>();
+
+            modelBuilder.Entity<Collection>()
+                .HasOne(c => c.CollectionImage)
+                .WithOne(i => i.Collection)
+                .HasForeignKey<CollectionImage>(c => c.CollectionId);
+
+            modelBuilder.Entity<Item>()
+                .HasOne(i => i.ItemImage)
+                .WithOne(i => i.Item)
+                .HasForeignKey<ItemImage>(i => i.ItemId);
         }
     }
 }

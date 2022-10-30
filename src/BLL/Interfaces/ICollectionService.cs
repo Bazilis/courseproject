@@ -7,6 +7,7 @@ namespace BLL.Interfaces
         IEnumerable<CollectionDto> GetAll();
         IEnumerable<CollectionDto> GetCollectionsByUserId(int userId);
         IEnumerable<CollectionDto> GetCollectionsSortedFiltered(int userId, string sortParam, string filterName, string filterValue);
-        void DeleteCollectionById(int collectionId);
+        Task AddCollection(CollectionDto collectionDto);
+        Task DeleteCollectionById(int collectionId);
     }
 }

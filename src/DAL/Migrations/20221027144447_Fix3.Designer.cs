@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221027144447_Fix3")]
+    partial class Fix3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,8 +234,8 @@ namespace DAL.Migrations
                     b.Property<DateTime>("ItemCreationTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ItemImageId")
-                        .HasColumnType("int");
+                    b.Property<string>("ItemImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -247,33 +249,6 @@ namespace DAL.Migrations
                     b.HasIndex("CollectionId");
 
                     b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("DAL.Entities.ItemImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PublicId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId")
-                        .IsUnique();
-
-                    b.ToTable("ItemImages");
                 });
 
             modelBuilder.Entity("DAL.Entities.Tag", b =>
@@ -470,17 +445,6 @@ namespace DAL.Migrations
                     b.Navigation("Collection");
                 });
 
-            modelBuilder.Entity("DAL.Entities.ItemImage", b =>
-                {
-                    b.HasOne("DAL.Entities.Item", "Item")
-                        .WithOne("ItemImage")
-                        .HasForeignKey("DAL.Entities.ItemImage", "ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-                });
-
             modelBuilder.Entity("DAL.Entities.Tag", b =>
                 {
                     b.HasOne("DAL.Entities.Item", "Item")
@@ -569,8 +533,6 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Entities.Item", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("ItemImage");
 
                     b.Navigation("Tags");
 

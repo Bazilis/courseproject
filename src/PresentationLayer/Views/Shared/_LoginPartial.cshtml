@@ -9,6 +9,9 @@
     <li class="nav-item">
         <p class="nav-link text-dark">Hi @User.Identity?.Name!</p>
     </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-controller="Home" asp-action="Index" title="Home page">Home page</a>
+    </li>
     if(User.IsInRole("Admin"))
     {
         <li class="nav-item">

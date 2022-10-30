@@ -8,7 +8,14 @@
 <div class="card">
 @if(Model != null)
 {
-    <img src="..." class="card-img-top" alt="...">
+    @if (Model.ItemImageUrl != null)
+    {
+        <img src="@Model.ItemImageUrl" class="card-img-top" alt="Item image">
+    }
+    else
+    {
+        <img src="~/noimage.jpg" class="card-img-top" alt="No image">
+    }
     <div class="card-body">
         <h5 class="card-title">@Model.Name</h5>
         <p class="card-text">@Model.Description</p>
@@ -91,18 +98,18 @@
     {
         <div class="card-body">
             <i class="bi bi-hand-thumbs-up" data-bs-toggle="tooltip" title="Like"></i>
-                @if(Model.UsersLikes?.Count == 1)
-                {
-                    <span class="badge rounded-pill bg-success">
-                        @Model.UsersLikes?.Count like
-                    </span>
-                }
-                else
-                {
-                    <span class="badge rounded-pill bg-success">
-                        @Model.UsersLikes?.Count likes
-                    </span>
-                }
+            @if(Model.UsersLikes?.Count == 1)
+            {
+                <span class="badge rounded-pill bg-success">
+                    @Model.UsersLikes?.Count like
+                </span>
+            }
+            else
+            {
+                <span class="badge rounded-pill bg-success">
+                    @Model.UsersLikes?.Count likes
+                </span>
+            }
         </div>
         if (Model.Comments.Any())
         {

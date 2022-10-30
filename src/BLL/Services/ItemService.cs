@@ -1,5 +1,6 @@
 ﻿using BLL.Dto;
 using BLL.Interfaces;
+using DAL.Entities;
 using DAL.Repository.Interfaces;
 using Mapster;
 
@@ -8,17 +9,23 @@ namespace BLL.Services
     public class ItemService : IItemService
     {
         private readonly IItemRepository _items;
+        private readonly IItemImageRepository _images;
+        private readonly ICloudinaryImageService _cloudinaryImageService;
 
-        public ItemService(IItemRepository items)
+        public ItemService(IItemRepository items,
+            IItemImageRepository images,
+            ICloudinaryImageService cloudinaryImageService)
         {
             _items = items;
+            _images = images;
+            _cloudinaryImageService = cloudinaryImageService;
         }
 
         public ItemDto GetItemById(int itemId)
         {
             var item = _items.FirstOrDefault(
                 filter: i => i.Id == itemId,
-                includeProperties: "Comments,UsersLikes");
+                includeProperties: "ItemImage,Comments,UsersLikes");
 
             return item.Adapt<ItemDto>();
         }
@@ -27,14 +34,17 @@ namespace BLL.Services
         {
             var items = _items.GetAll(
                 filter: i => i.CollectionId == collectionId,
-                orderBy: q => q.OrderByDescending(i => i.ItemCreationTime));
+                orderBy: q => q.OrderByDescending(i => i.ItemCreationTime),
+                includeProperties: "ItemImage,UsersLikes");
 
             return items.Adapt<IEnumerable<ItemDto>>();
         }
 
         public IEnumerable<ItemDto> GetItemsSortedFiltered(int collectionId, string sortParam, string filterName, string filterValue)
         {
-            var items = _items.GetAll(filter: i => i.CollectionId == collectionId);
+            var items = _items.GetAll(
+                filter: i => i.CollectionId == collectionId,
+                includeProperties: "ItemImage,UsersLikes");
 
             var sortedItems = sortParam switch
             {
@@ -54,11 +64,41 @@ namespace BLL.Services
             return filteredItems.Adapt<IEnumerable<ItemDto>>();
         }
 
-        public void DeleteItemById(int itemId)
+        public async Task AddItem(ItemDto itemDto)
         {
-            var item = _items.FirstOrDefault(filter: i => i.Id == itemId);
+            var item = itemDto.Adapt<Item>();
+            item.ItemCreationTime = DateTime.Now;
+            _items.Add(item);
+            _items.Save();
+
+            if (itemDto.FormFile != null)
+            {
+                var uploadResult = await _cloudinaryImageService.AddImageToCloudinaryAsync(itemDto.FormFile);
+                var itemImage = new ItemImage
+                {
+                    ItemId = item.Id,
+                    PublicId = uploadResult.PublicId,
+                    Url = uploadResult.Url.ToString()
+                };
+                _images.Add(itemImage);
+                _images.Save();
+                item.ItemImageId = itemImage.Id;
+                _items.Save();
+            }
+        }
+
+        public async Task DeleteItemById(int itemId)
+        {
+            var item = _items.FirstOrDefault(
+                filter: i => i.Id == itemId,
+                includeProperties: "ItemImage");
+
             if(item != null)
             {
+                if (item.ItemImage != null)
+                    await _cloudinaryImageService
+                        .DeleteImageFromCloudinaryAsync(item.ItemImage.PublicId);
+
                 _items.Remove(item);
                 _items.Save();
             }

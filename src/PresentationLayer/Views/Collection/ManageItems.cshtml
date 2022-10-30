@@ -5,49 +5,55 @@
 @inject SignInManager<AppUser> SignInManager
 
 <div class="row row-cols-auto">
-    <div class="card">
-        <div class="card-body">
-            <form method="get">
-                <input hidden value="@Model.FirstOrDefault()?.CollectionId" name="collectionId" />
-                <select class="form-select" name="sortParam">
-                    <option value="">-- sort items by --</option>
-                    <option value="name">item name</option>
-                    <option value="date">creation date</option>
-                    <option value="date_desc">creation date descending</option>
-                </select>
-                <br />
-                <button type="submit" formaction="@Url.Action("ManageItems")" class="btn btn-success" data-bs-toggle="tooltip" title="Sort collections by selected option">
-                    Sort
-                </button>
-                <br />
-                <br />
-                <h5>Total items @Model.Count()</h5>
-            </form>
+    @if(Model.Any())
+    {
+        <div class="card">
+            <div class="card-body">
+                <form method="get">
+                    <input hidden value="@Model.FirstOrDefault()?.CollectionId" name="collectionId" />
+                    <select class="form-select" name="sortParam">
+                        <option value="">-- sort items by --</option>
+                        <option value="name">item name</option>
+                        <option value="date">creation date</option>
+                        <option value="date_desc">creation date descending</option>
+                    </select>
+                    <br />
+                    <button type="submit" formaction="@Url.Action("ManageItems")" class="btn btn-success" data-bs-toggle="tooltip" title="Sort collections by selected option">
+                        Sort
+                    </button>
+                    <br />
+                    <br />
+                    <h5>Total items @Model.Count()</h5>
+                </form>
+            </div>
         </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <form method="get">
-                <input value="@Model.FirstOrDefault()?.CollectionId" name="collectionId" hidden />
-                <select class="form-select" name="filterName">
-                    <option value="">-- filter items by --</option>
-                    <option value="name">item name</option>
-                    <option value="tag_name">item tag</option>
-                </select>
-                <input type="text" name="filterValue" class="form-control text-box single-line" placeholder="enter filter value" />
-                <br />
-                <button type="submit" formaction="@Url.Action("ManageItems")" class="btn btn-success" data-bs-toggle="tooltip" title="Filter collections by selected option">
-                    Filter
-                </button>
-            </form>
+        <div class="card">
+            <div class="card-body">
+                <form method="get">
+                    <input hidden value="@Model.FirstOrDefault()?.CollectionId" name="collectionId" />
+                    <select class="form-select" name="filterName">
+                        <option value="">-- filter items by --</option>
+                        <option value="name">item name</option>
+                        <option value="tag_name">item tag</option>
+                    </select>
+                    <input type="text" name="filterValue" class="form-control text-box single-line" placeholder="enter filter value" />
+                    <br />
+                    <button type="submit" formaction="@Url.Action("ManageItems")" class="btn btn-success" data-bs-toggle="tooltip" title="Filter collections by selected option">
+                        Filter
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
+    }
+    
     @if (SignInManager.IsSignedIn(User))
     {
+        var collectionId = Convert.ToInt32(ViewContext.HttpContext.Request.Query["collectionid"].ToString());
+
         <div class="align-self-center">
             <div class="card">
                 <div class="card-body">
-                    <a asp-controller="Item" asp-action="Add" class="btn btn-success" data-bs-toggle="tooltip" title="Push me!">
+                    <a asp-controller="Item" asp-action="Create" asp-route-collectionid="@collectionId" class="btn btn-success" data-bs-toggle="tooltip" title="Push me!">
                         Add new item
                     </a>
                 </div>

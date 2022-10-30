@@ -6,9 +6,29 @@
 
 <div class="col">
     <div class="card h-100">
-        <img src="..." class="card-img-top" alt="...">
+        @if (Model.ItemImageUrl != null)
+        {
+            <img src="@Model.ItemImageUrl" class="card-img-top" alt="Item image">
+        }
+        else
+        {
+            <img src="~/noimage.jpg" class="card-img-top" alt="No image">
+        }
         <div class="card-body">
             <h5 class="card-title">@Model.Name</h5>
+            <i class="bi bi-hand-thumbs-up" data-bs-toggle="tooltip" title="You already have like"></i>
+            @if (Model.UsersLikes?.Count == 1)
+            {
+                <span class="badge rounded-pill bg-success">
+                    @Model.UsersLikes?.Count like
+                </span>
+            }
+            else
+            {
+                <span class="badge rounded-pill bg-success">
+                    @Model.UsersLikes?.Count likes
+                </span>
+            }
         </div>
         
         @if (SignInManager.IsSignedIn(User))
@@ -17,6 +37,9 @@
             if ((string?)ViewContext.RouteData.Values["Action"] == "ManageItems"
                 || await UserManager.IsInRoleAsync(user, "Admin"))
             {
+                <div class="card-body align-self-center">
+                    <a asp-controller="Item" asp-action="Details" asp-route-itemid="@Model.Id" class="btn btn-primary">Open item</a>
+                </div>
                 <div class="card-body">
                     <a asp-controller="Item" asp-action="Edit" asp-route-itemid="@Model.Id" class="btn btn-outline-secondary">Edit item</a>
                     <a asp-controller="Item" asp-action="Delete" asp-route-collectionid="@Model.CollectionId" asp-route-itemid="@Model.Id" class="btn btn-outline-danger">Delete item</a>

@@ -1,15 +1,15 @@
+using BLL.Extensions;
+using BLL.Interfaces;
+using BLL.Settings;
 using DAL;
 using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using BLL.Extensions;
 using PresentationLayer.Filters;
-using Microsoft.Extensions.Options;
-using BLL.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(nameof(CloudinarySettings)));
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -26,7 +26,7 @@ builder.Services.AddDefaultIdentity<AppUser> (options => {
     .AddRoles<AppRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddControllersWithViews(options =>
-options.Filters.Add<BlockUserFilterAsync>());
+    options.Filters.Add<BlockUserFilterAsync>());
 
 builder.Services.AddBllServices();
 

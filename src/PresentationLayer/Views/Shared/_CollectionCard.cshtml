@@ -1,12 +1,20 @@
-﻿@using DAL.Entities
+﻿@using BLL.Dto
+@using DAL.Entities
 @using Microsoft.AspNetCore.Identity
-@model BLL.Dto.CollectionDto
+@model CollectionDto
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
 <div class="col">
     <div class="card">
-        <img src="..." class="card-img-top" alt="...">
+        @if (Model.CollectionImageUrl != null)
+        {
+            <img src="@Model.CollectionImageUrl" class="card-img-top" alt="Collection image">
+        }
+        else
+        {
+            <img src="~/noimage.jpg" class="card-img-top" alt="No image">
+        }
         <div class="card-body">
             <h5 class="card-title">@Model.Name</h5>
             <h5 class="card-title">Collection of @Model.CollectionType</h5>
